@@ -90,4 +90,5 @@ type VirtualGuest struct {
                 PrimaryBackendIPAddress string `json:"primaryBackendIpAddress"`
                 PrimaryIPAddress        string `json:"primaryIpAddress"`
                 ProvisionDate           string `json:"provisionDate"`
+                Notes           		string `json:"notes"`
 }

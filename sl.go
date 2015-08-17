@@ -29,13 +29,16 @@ func main() {
 			    println("Unable to read configuration file /home/vagrant/.sl/config")
 			}
 			configString := strings.TrimSpace(string(config))
-			url := fmt.Sprint("https://", configString, "/rest/v3/SoftLayer_Account/VirtualGuests.json")
+			urlString := fmt.Sprint("https://", configString, "/rest/v3/SoftLayer_Account/VirtualGuests.json")
 
 			// Build the request
-			req, err := http.NewRequest("GET", url, nil)
+			req, err := http.NewRequest("GET", urlString, nil)
 			if err != nil {
 			    println("Unable to create request")
 			}
+
+			req.ParseForm()
+			req.Form.Add("objectMask","id;hostname;provisionDate;primaryIpAddress;primaryBackendIpAddress;operatingSystem.passwords;networkComponents;notes")
 
 			// Send the request via a client
 			client := &http.Client{}
@@ -64,14 +67,16 @@ func main() {
 			fmt.Printf("%-30s", "Hostname")
 			fmt.Printf("%-18s", "Private IP")
 			fmt.Printf("%-18s", "Public IP")
-			fmt.Printf("%-25s\n", "Provision Date")
+			fmt.Printf("%-30s", "Provision Date")
+			fmt.Printf("%-30s\n", "Notes")
 
 			for _,each := range virtualGuests {
 			    fmt.Printf("%-12d", each.ID)
 			    fmt.Printf("%-30s", each.Hostname)
 			    fmt.Printf("%-18s", each.PrimaryBackendIPAddress)
 			    fmt.Printf("%-18s", each.PrimaryIPAddress)
-			    fmt.Printf("%-25s\n", each.ProvisionDate)
+			    fmt.Printf("%-30s", each.ProvisionDate)
+			    fmt.Printf("%-30s\n", each.Notes)
 			}
 		},
 	},
